@@ -1,11 +1,13 @@
 import pickle
-
+#cottage_cheese_casserole.txt
 pics = {}
 try:
     with open("pics.pickle", "rb") as f:
         pics = pickle.load(f)
 except FileNotFoundError:
     pics = {}
+
+print(pics)
 
 while(True):
     inp = input("Введите команду(add showall delete quit)\n")
