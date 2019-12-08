@@ -65,15 +65,22 @@ def main():
         try:
             for event in longpoll.listen():
                 # Первое использование бота
-                if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.user_id not in userlist:
+                if event.type == VkEventType.MESSAGE_NEW and event.to_me and (event.user_id not in userlist or
+                event.text.lower() == "начать"):
+                    greeting = "Добро пожаловать! Не знаете что приготовить? Надоела одна и таже пища? "
+                    greeting += "Воспользуйтесь нашим ботом! Напишите боту 'рецепт', и бот выдаст вам случайное "
+                    greeting += "блюдо и нужные для его приготовления продукты, а ответив боту 'да' вы получите "
+                    greeting += "полную инструкцию по приготовлению. Приятного аппетита!\n\nНапишите 'помощь', "
+                    greeting += "чтобы получить список доступных команд"
                     vk.messages.send(
                         user_id=event.user_id,
                         random_id=get_random_id(),
-                        message=instruction
+                        message=greeting
                     )
                     userlist[event.user_id] = []#Добавление нового пользователя
                     with open("users.pickle", "wb") as f:
                         pickle.dump(userlist, f)
+                    continue
 
                 elif event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text.lower() == "помощь":
                     vk.messages.send(user_id = event.user_id,
